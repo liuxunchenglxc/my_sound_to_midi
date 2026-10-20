@@ -4,6 +4,9 @@ RUN xbps-install -Suy git bash curl uv ffmpeg6 tree libsndfile-devel fluidsynth 
     xbps-remove -Oo
 
 COPY requirements.txt .
-RUN uv pip install --system --break-system-packages --no-cache-dir numpy Cython && uv pip install --system --break-system-packages --no-cache-dir -r requirements.txt && omnizart download-checkpoints
+RUN uv pip install --system --break-system-packages --no-cache-dir numpy Cython && \
+    uv pip install --system --break-system-packages --no-cache-dir --no-build-isolation madmom && \
+    uv pip install --system --break-system-packages --no-cache-dir -r requirements.txt && \
+    omnizart download-checkpoints
 
 WORKDIR /workspace
