@@ -43,18 +43,18 @@ def main(args):
             base_model_path = "/usr/lib/python3.14/site-packages/omnizart/checkpoints"
             subprocess.run(["tree", base_model_path])
             # For pop type
-            subprocess.run(["omnizart", "music", "transcribe", "--model-path", os.path.join(base_model_path, "music", "music_pop"), "--output", src_to_res(other_path), other_path])
-            subprocess.run(["omnizart", "vocal", "transcribe", "--output", src_to_res(vocals_path), vocals_path])
-            subprocess.run(["omnizart", "music", "transcribe", "--model-path", os.path.join(base_model_path, "music", "music_pop"), "--output", src_to_res(bass_path), bass_path])
-            subprocess.run(["omnizart", "music", "transcribe", "--model-path", os.path.join(base_model_path, "music", "music_pop"), "--output", src_to_res(drums_path), drums_path])
+            subprocess.run(["omnizart", "music", "transcribe", "--model-path", os.path.join(base_model_path, "music", "music_note_stream"), "--output", src_to_res(other_path), other_path])
+            # subprocess.run(["omnizart", "vocal", "transcribe", "--output", src_to_res(vocals_path), vocals_path])
+            subprocess.run(["omnizart", "music", "transcribe", "--model-path", os.path.join(base_model_path, "music", "music_note_stream"), "--output", src_to_res(bass_path), bass_path])
+            subprocess.run(["omnizart", "music", "transcribe", "--model-path", os.path.join(base_model_path, "music", "music_note_stream"), "--output", src_to_res(drums_path), drums_path])
             # merge midi
-            midi_vocal = pretty_midi.PrettyMIDI(src_to_res(vocals_path))
+            # midi_vocal = pretty_midi.PrettyMIDI(src_to_res(vocals_path))
             midi_music = pretty_midi.PrettyMIDI(src_to_res(other_path))
             midi_bass = pretty_midi.PrettyMIDI(src_to_res(bass_path))
             midi_drums = pretty_midi.PrettyMIDI(src_to_res(drums_path))
             merged = pretty_midi.PrettyMIDI()
-            for inst in midi_vocal.instruments:
-                merged.instruments.append(inst)
+            # for inst in midi_vocal.instruments:
+            #     merged.instruments.append(inst)
             for inst in midi_music.instruments:
                 merged.instruments.append(inst)
             for inst in midi_bass.instruments:
