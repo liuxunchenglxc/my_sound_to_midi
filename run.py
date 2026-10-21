@@ -1,6 +1,7 @@
 from buzzheavier import BuzzHeavier
 import subprocess
 import os
+import pretty_midi
 
 def main(args):
     bzid = args.bzid
@@ -10,8 +11,15 @@ def main(args):
     res_suffix = "mid"
     src_dict = buzzheavier.find_file_by_suffix(dir_id, "." + src_suffix)
     res_dict = buzzheavier.find_file_by_suffix(dir_id, "." + res_suffix)
+    
+    def res_to_src(path):
+        return path.replace("." + res_suffix, "." + src_suffix)
+    
+    def src_to_res(path):
+        return path.replace("." + src_suffix, "." + res_suffix)
+    
     for res_file in res_dict.keys():
-        src_file = res_file.replace("." + res_suffix, "." + src_suffix)
+        src_file = res_to_src(res_file)
         if src_file in src_dict:
             print(f"Removing {src_file} because {res_file} exists.")
             del src_dict[src_file]
@@ -21,7 +29,7 @@ def main(args):
         for src_file, src_url in src_dict.items():
             save_path = f"res/{src_file}"
             buzzheavier.download_file(src_url, save_path)
-            res_fn = src_file.replace("." + src_suffix, "." + res_suffix)
+            res_fn = src_to_res(src_file)
             # demucs
             subprocess.run(["demucs", "--flac", save_path])
             subprocess.run(["tree", "separated"])
@@ -32,7 +40,18 @@ def main(args):
             other_path = os.path.join(demucs_dir_path, "other.flac")
             vocals_path = os.path.join(demucs_dir_path, "vocals.flac")
             # omnizart
-            subprocess.run(["omnizart", "music", "transcribe", other_path])
+            subprocess.run(["omnizart", "music", "transcribe", "--output", src_to_res(other_path), other_path])
+            subprocess.run(["omnizart", "vocal", "transcribe", "--output", src_to_res(vocals_path), vocals_path])
+            # merge midi
+            midi_music = pretty_midi.PrettyMIDI(src_to_res(other_path))
+            midi_vocal = pretty_midi.PrettyMIDI(src_to_res(vocals_path))
+            merged = pretty_midi.PrettyMIDI()
+            for inst in midi_vocal.instruments:
+                merged.instruments.append(inst)
+            for inst in midi_music.instruments:
+                merged.instruments.append(inst)
+            merged.write(res_fn)
+            # upload
             if os.path.exists(res_fn):
                 buzzheavier.upload_file(dir_id, res_fn)
     print("All tasks completed successfully!")
