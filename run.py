@@ -31,6 +31,8 @@ def main(args):
             drums_path = os.path.join(demucs_dir_path, "drums.flac")
             other_path = os.path.join(demucs_dir_path, "other.flac")
             vocals_path = os.path.join(demucs_dir_path, "vocals.flac")
+            # omnizart
+            subprocess.run(["omnizart", "music", "transcribe", other_path])
             if os.path.exists(res_fn):
                 buzzheavier.upload_file(dir_id, res_fn)
     print("All tasks completed successfully!")
