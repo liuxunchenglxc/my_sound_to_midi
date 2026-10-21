@@ -30,27 +30,30 @@ def main(args):
             save_path = f"res/{src_file}"
             buzzheavier.download_file(src_url, save_path)
             res_fn = src_to_res(src_file)
-            # demucs
-            subprocess.run(["demucs", "--flac", save_path])
-            subprocess.run(["tree", "separated"])
-            # demucs paths
-            demucs_dir_path = "separated/htdemucs/" + src_file.removesuffix("." + src_suffix)
-            bass_path = os.path.join(demucs_dir_path, "bass.flac")
-            drums_path = os.path.join(demucs_dir_path, "drums.flac")
-            other_path = os.path.join(demucs_dir_path, "other.flac")
-            vocals_path = os.path.join(demucs_dir_path, "vocals.flac")
+            # # demucs
+            # subprocess.run(["demucs", "--flac", save_path])
+            # subprocess.run(["tree", "separated"])
+            # # demucs paths
+            # demucs_dir_path = "separated/htdemucs/" + src_file.removesuffix("." + src_suffix)
+            # bass_path = os.path.join(demucs_dir_path, "bass.flac")
+            # drums_path = os.path.join(demucs_dir_path, "drums.flac")
+            # other_path = os.path.join(demucs_dir_path, "other.flac")
+            # vocals_path = os.path.join(demucs_dir_path, "vocals.flac")
             # omnizart
-            subprocess.run(["omnizart", "music", "transcribe", "--output", src_to_res(other_path), other_path])
-            subprocess.run(["omnizart", "vocal", "transcribe", "--output", src_to_res(vocals_path), vocals_path])
-            # merge midi
-            midi_music = pretty_midi.PrettyMIDI(src_to_res(other_path))
-            midi_vocal = pretty_midi.PrettyMIDI(src_to_res(vocals_path))
-            merged = pretty_midi.PrettyMIDI()
-            for inst in midi_vocal.instruments:
-                merged.instruments.append(inst)
-            for inst in midi_music.instruments:
-                merged.instruments.append(inst)
-            merged.write(res_fn)
+            subprocess.run(["tree", "/usr/lib/python3.14/site-packages/omnizart/checkpoints"])
+            # subprocess.run(["omnizart", "music", "transcribe", "--output", src_to_res(other_path), other_path])
+            # subprocess.run(["omnizart", "vocal", "transcribe", "--output", src_to_res(vocals_path), vocals_path])
+            # subprocess.run(["omnizart", "vocal", "transcribe", "--output", src_to_res(bass_path), bass_path])
+            # subprocess.run(["omnizart", "vocal", "transcribe", "--output", src_to_res(drums_path), drums_path])
+            # # merge midi
+            # midi_music = pretty_midi.PrettyMIDI(src_to_res(other_path))
+            # midi_vocal = pretty_midi.PrettyMIDI(src_to_res(vocals_path))
+            # merged = pretty_midi.PrettyMIDI()
+            # for inst in midi_vocal.instruments:
+            #     merged.instruments.append(inst)
+            # for inst in midi_music.instruments:
+            #     merged.instruments.append(inst)
+            # merged.write(res_fn)
             # upload
             if os.path.exists(res_fn):
                 buzzheavier.upload_file(dir_id, res_fn)
