@@ -43,7 +43,7 @@ def main(args):
             base_model_path = "/usr/lib/python3.14/site-packages/omnizart/checkpoints"
             subprocess.run(["tree", base_model_path])
             # For pop type # music_note_stream music_piano music_piano-v2 music_pop
-            subprocess.run(["omnizart", "music", "transcribe", "--model-path", os.path.join(base_model_path, "music", "music_pop"), "--output", src_to_res(other_path), other_path])
+            subprocess.run(["omnizart", "music", "transcribe", "--model-path", os.path.join(base_model_path, "music", "music_piano-v2"), "--output", src_to_res(other_path), other_path])
             # subprocess.run(["omnizart", "vocal", "transcribe", "--output", src_to_res(vocals_path), vocals_path])
             subprocess.run(["omnizart", "music", "transcribe", "--model-path", os.path.join(base_model_path, "music", "music_note_stream"), "--output", src_to_res(bass_path), bass_path])
             subprocess.run(["omnizart", "music", "transcribe", "--model-path", os.path.join(base_model_path, "music", "music_note_stream"), "--output", src_to_res(drums_path), drums_path])
