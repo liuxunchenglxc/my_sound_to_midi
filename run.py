@@ -25,7 +25,12 @@ def main(args):
             # demucs
             subprocess.run(["demucs", "--flac", save_path])
             subprocess.run(["tree", "separated"])
-            
+            # demucs paths
+            demucs_dir_path = "separated/htdemucs/" + src_file.removesuffix("." + src_suffix)
+            bass_path = os.path.join(demucs_dir_path, "bass.flac")
+            drums_path = os.path.join(demucs_dir_path, "drums.flac")
+            other_path = os.path.join(demucs_dir_path, "other.flac")
+            vocals_path = os.path.join(demucs_dir_path, "vocals.flac")
             if os.path.exists(res_fn):
                 buzzheavier.upload_file(dir_id, res_fn)
     print("All tasks completed successfully!")
